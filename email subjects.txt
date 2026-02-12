@@ -1,0 +1,17 @@
+email-title-new-account=
+Welcome to eTracking - New Account Setup Completed - ETC2950-0000
+
+email-title-renewal-pending=
+eTracking Service Renewal Pending Payment Reminder - ETC2950-0000
+
+email-title-renewal-done=
+eTracking Service Renewal Confirmed - Invoice Paid - ETC2950-0000
+
+email-title-device-transfer=
+eTracking Device Transfer Completed Successfully - ETC2950-0000
+
+email-title-device-redo=
+eTracking Device Reinstallation Completed Successfully - ETC2950-0000
+
+email-title-device-addition=
+eTracking New Device Successfully installed and added to Your Account - ETC2950-0000

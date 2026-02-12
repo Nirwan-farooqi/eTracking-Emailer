@@ -1,0 +1,92 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# Environment files
+.env
+.env.local
+.env.production
+.env.staging
+.env.test
+
+# Logs
+logs/
+*.log
+log/
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+.nyc_output/
+
+# Customer Data (SENSITIVE - NEVER COMMIT)
+customers/
+customers/*.csv
+customer-data/
+data/
+
+# Output and Generated Files
+output/
+reports/
+exports/
+processed/
+temp/
+tmp/
+
+# Backup Files
+backups/
+backup-*/
+*.backup
+*.bak
+
+# Email Attachments and Images (except template images)
+attachments/
+images/*.jpg
+images/*.jpeg
+images/*.png
+images/*.gif
+!images/payment-options.jpeg
+
+# Test Files
+test-output/
+test-data/
+*.test.csv
+
+# Editor and IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Application specific
+email-queue/
+failed-emails/
+sent-emails/
+*.processed
+*.failed
+
+# Temporary SMTP test files
+test_smtp.js
+
+# Local configuration overrides
+config.local.json
+settings.local.json

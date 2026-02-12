@@ -1,0 +1,265 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>E-Tracking - Device Reinstallation Confirmation</title>
+    <style>
+      body { font-family: Arial, Helvetica, sans-serif; font-size: 13.3333px;
+      color: #000; background-color: #fff; margin: 0; padding: 0; } .container {
+      max-width: 600px; margin: 0 auto; padding: 20px; box-sizing: border-box; }
+      .confirmation-box { background-color: #f0fff0; border: 2px solid #00aa00;
+      padding: 15px; border-radius: 5px; margin: 20px 0; text-align: center; }
+      .greeting { font-weight: bold; margin-bottom: 20px; text-align: center; }
+      .content { line-height: 1.6; margin-bottom: 20px; } .details-table {
+      width: 100%; max-width: 100%; border-collapse: collapse; border: 1px solid
+      #000; margin: 20px 0; table-layout: fixed; } .details-table th {
+      background-color: #00aa00; color: white; font-weight: bold; text-align:
+      center; padding: 8px; border: 1px solid #000; } .details-table td {
+      padding: 8px; border: 1px solid #000; font-size: 10pt; word-wrap:
+      break-word; } .details-table .label { width: 40%; font-weight: bold; }
+      .details-table .value { text-align: center; width: 60%; } .vehicles-table
+      { width: 100%; max-width: 100%; border-collapse: collapse; border: 1px
+      solid #000; margin: 20px 0; table-layout: auto; } .vehicles-table th {
+      background-color: #00aa00; color: white; font-weight: bold; text-align:
+      center; padding: 6px 4px; border: 1px solid #000; font-size: 9pt;
+      word-wrap: break-word; } .vehicles-table td { padding: 4px 2px; border:
+      1px solid #000; font-size: 8pt; text-align: center; word-wrap: break-word;
+      overflow-wrap: break-word; } .credentials-table { width: 100%; max-width:
+      100%; border-collapse: collapse; border: 1px solid #000; margin: 20px 0;
+      table-layout: fixed; } .credentials-table th { background-color: #00aa00;
+      color: white; font-weight: bold; text-align: center; padding: 8px; border:
+      1px solid #000; } .credentials-table td { padding: 8px; border: 1px solid
+      #000; font-size: 10pt; word-wrap: break-word; } .credentials-table .label
+      { width: 40%; font-weight: bold; } .credentials-table .value { text-align:
+      center; width: 60%; } .success { color: #00aa00; font-weight: bold; }
+      .signature { margin-top: 30px; border-top: 1px solid #009900; padding-top:
+      15px; } .contact-info { font-size: 10px; color: #808080; margin-top: 20px;
+      } /* Mobile responsive styles */ @media screen and (max-width: 600px) {
+      .container { padding: 10px; } .details-table, .vehicles-table,
+      .credentials-table { font-size: 9pt; } .details-table td, .vehicles-table
+      td, .credentials-table td { padding: 4px 2px; font-size: 8pt; }
+      .details-table th, .vehicles-table th, .credentials-table th { padding:
+      4px 2px; font-size: 8pt; } .vehicles-table th { font-size: 7pt; }
+      .vehicles-table td { font-size: 7pt; } } @media screen and (max-width:
+      480px) { .vehicles-table { font-size: 7pt; } .vehicles-table th,
+      .vehicles-table td { padding: 2px 1px; font-size: 6pt; } }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Greeting Section -->
+      <div class="greeting">
+        <strong>السلام عليكم ورحمة الله وبركاته</strong>
+      </div>
+
+      <!-- Welcome Box -->
+      <div class="confirmation-box">
+        <h2 style="color: #00aa00; margin: 0;">🔧 Device Reinstallation
+          Completed!</h2>
+        <p style="margin: 10px 0 0 0;">Your tracking device has been
+          successfully reinstalled and reactivated</p>
+      </div>
+
+      <!-- Main Content -->
+      <div class="content">
+        Dear Customer, Your tracking device has been successfully reinstalled in
+        your vehicle and your E-Tracking account is now active again. Below you
+        will find your complete service details, vehicle information, and user
+        login credentials to access your E-Tracking account.
+        <br /><br />
+        You can now monitor your vehicles 24/7 through our web portal and mobile
+        application anytime anywhere in the world.
+      </div>
+
+      <!-- 1st Table: Account & Service Details (with Reinstallation Date) -->
+      <table class="details-table">
+        <tr>
+          <th colspan="2">Account & Service Details</th>
+        </tr>
+        <tr>
+          <td class="label">Name</td>
+          <td class="value">{{{customerName}}}</td>
+        </tr>
+        <tr>
+          <td class="label">CNIC / NTN</td>
+          <td class="value">{{cnic}}</td>
+        </tr>
+        <tr>
+          <td class="label">Authorized POC</td>
+          <td class="value">{{{contactNumber}}}</td>
+        </tr>
+        <tr>
+          <td class="label">Reference Number</td>
+          <td class="value">{{referenceNumber}}</td>
+        </tr>
+        <tr>
+          <td class="label">Date of Reinstallation</td>
+          <td class="value success">{{installationDate}}</td>
+        </tr>
+        <tr>
+          <td class="label">Total Devices</td>
+          <td class="value">{{totalDevices}}</td>
+        </tr>
+        <tr>
+          <td class="label">Service Type</td>
+          <td class="value">Device Reinstallation</td>
+        </tr>
+        {{#if notes}}
+          <tr>
+            <td class="label">Additional Notes</td>
+            <td class="value">{{{notes}}}</td>
+          </tr>
+        {{/if}}
+      </table>
+
+      <br /><br />
+      <!-- 2nd Table: Vehicles -->
+      {{#if vehicles}}
+        <table class="vehicles-table">
+          <tr>
+            <th>Sr.</th>
+            <th>Vehicle</th>
+            <th>Model</th>
+            <th>Package</th>
+            <th>Amount</th>
+            <th>Tenure Start Date</th>
+          </tr>
+          {{#each vehicles}}
+            <tr>
+              <td>{{rank}}</td>
+              <td>{{regNumber}}</td>
+              <td>{{model}}</td>
+              <td>{{package}}</td>
+              <td class="success">{{amount}}</td>
+              <td>{{startDate}}</td>
+            </tr>
+          {{/each}}
+          <tr style="background-color: #e8f5e8;">
+            <td colspan="4" style="font-weight: bold; text-align: right;">TOTAL
+              AMOUNT PAID</td>
+            <td class="success" style="font-weight: bold;">{{totalAmount}}</td>
+            <td></td>
+          </tr>
+        </table>
+      {{/if}}
+
+      <div class="content">
+        <strong class="success">Service will remain Active till tenure renewal
+          date:
+          {{expiryDate}}</strong>
+      </div>
+
+      <br />
+	  
+	  
+      <!-- 3rd Table: Credentials -->
+      {{#if credentials}}
+        <table class="credentials-table">
+          <tr>
+            <th colspan="2">E-Tracking User Login Details</th>
+          </tr>
+          <tr>
+            <td class="label">Username</td>
+            <td
+              class="value"
+              style="white-space: pre-line;"
+            >{{email}}</td>
+          </tr>
+		  
+		    <tr>
+              <td class="label">Password</td>
+              <td class="value">******** (unchanged)</td>
+            </tr>
+			
+          {{#if alertMobile}}
+            <tr>
+              <td class="label">Mobile number for sms call alerts</td>
+              <td class="value">{{alertMobile}}</td>
+            </tr>
+          {{/if}}
+          {{#if residentCity}}
+            <tr>
+              <td class="label">Resident city for geofence exit alert</td>
+              <td class="value">{{residentCity}}</td>
+            </tr>
+          {{/if}}
+        </table>
+      {{/if}}
+	  
+	  
+
+      <!-- Service Active Message and mobile app Links-->
+      <div class="content">
+        <hr style="border: 1px solid #009900; margin: 20px 0;" />
+        <strong><u>NEXT STEPS:</u></strong><br /><br />
+
+        <strong>✅ Your Service is Now Active</strong><br />
+        Your eTracking device has been reinstalled and all services are now
+        active as per your selected package.<br /><br />
+
+        <strong>📱 Access Your E-Tracking Account</strong><br />
+        You can now login your eTracking account on web or mobile apps anytime
+        anywhere.<br /><br />
+        - Web App:
+        <a
+          href="https://etracking.pk"
+          target="_blank"
+        >https://etracking.pk</a><br />
+        - Android App:
+        <a
+          href="https://etracking.pk/android-app"
+          target="_blank"
+        >https://etracking.pk/android-app</a><br />
+        - iPhone App:
+        <a
+          href="https://etracking.pk/ios-app"
+          target="_blank"
+        >https://etracking.pk/ios-app</a><br />
+
+      </div>
+
+      <!-- Signature -->
+
+      <div class="content">
+        <strong>Thank you for choosing eTracking services. We look forward to
+          serving you with our quality Vehicle Tracking & Fleet Management
+          Services. Stay blessed, Drive safe!</strong><br /><br />
+      </div>
+
+      <div class="content" style="text-align: center;">
+        <img
+          src="https://etracking.pk/wp-content/uploads/2018/10/ETS-revamped-Header-Logo-2018-Hi-tiny.png"
+          alt="E-Tracking Logo"
+        />
+      </div>
+
+      <div class="signature">
+        <div>
+          Regards,<br />
+          <br />
+          <strong>Support Team</strong><br />
+          E-Tracking Solutions<br />
+          <br />
+          Email: support@etracking.pk<br />
+          Website: https://etracking.pk<br />
+          Helpline:
+          <a href="tel:+923111277547" target="_blank">
+            03-111-277-547</a><br />
+
+          WhatsApp:
+          <a href="https://wa.me/923111277547" target="_blank">
+            03-111-277-547</a><br />
+
+        </div>
+      </div>
+
+      <!-- Contact Info -->
+      <div class="contact-info">
+        This is an automated device reinstallation confirmation sent by
+        E-Tracking Solutions. Please contact our support team at
+        support@etracking.pk if you have any questions about your account or
+        services.
+      </div>
+    </div>
+  </body>
+</html>

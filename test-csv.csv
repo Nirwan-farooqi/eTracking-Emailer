@@ -1,0 +1,4 @@
+email,customerName,cnic,contactNumber,etc_number,email-template,expiryDate,totalAmount
+test1@example.com,John Doe,12345-6789-0,0321-1234567,12345,renewal-pending,2026-03-15,Rs. 5000
+test2@example.com,Jane Smith,23456-7890-1,0312-9876543,12346,new-account,2027-02-28,Rs. 6000
+test3@example.com,Bob Johnson,34567-8901-2,0333-5555555,12347,device-transfer,2026-06-30,Rs. 8000

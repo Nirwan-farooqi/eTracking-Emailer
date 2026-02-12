@@ -1,0 +1,236 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>E-Tracking Service Renewal Reminder</title>
+    <style>
+      body { font-family: Arial, Helvetica, sans-serif; font-size: 13.3333px;
+      color: #000; background-color: #fff; margin: 0; padding: 0; } .container {
+      max-width: 600px; margin: 0 auto; padding: 20px; box-sizing: border-box; }
+      .confirmation-box-warning { background-color: #fff2f0; border: 2px solid
+      #d0142b; padding: 15px; border-radius: 5px; margin: 20px 0; text-align:
+      center; } .greeting { font-weight: bold; margin-bottom: 20px; text-align: center; } .content {
+      line-height: 1.6; margin-bottom: 20px; } .details-table { width: 100%;
+      max-width: 100%; border-collapse: collapse; border: 1px solid #000;
+      margin: 20px 0; table-layout: fixed; } .details-table th {
+      background-color: #00aa00; color: white; font-weight: bold; text-align:
+      center; padding: 8px; border: 1px solid #000; } .details-table td {
+      padding: 8px; border: 1px solid #000; font-size: 10pt; word-wrap:
+      break-word; } .details-table .label { width: 40%; font-weight: bold; }
+      .details-table .value { text-align: center; width: 60%; } .vehicles-table
+      { width: 100%; max-width: 100%; border-collapse: collapse; border: 1px
+      solid #000; margin: 20px 0; table-layout: auto; } .vehicles-table th {
+      background-color: #00aa00; color: white; font-weight: bold; text-align:
+      center; padding: 6px 4px; border: 1px solid #000; font-size: 9pt;
+      word-wrap: break-word; } .vehicles-table td { padding: 4px 2px; border:
+      1px solid #000; font-size: 8pt; text-align: center; word-wrap: break-word;
+      overflow-wrap: break-word; } .amount-highlight { font-weight: bold; color:
+      #d9534f; } .signature { margin-top: 30px; border-top: 1px solid #009900;
+      padding-top: 15px; } .contact-info { font-size: 10px; color: #808080;
+      margin-top: 20px; } .urgent { color: #d9534f; font-weight: bold; }
+      .payment-image { max-width: 100%; height: auto; width: auto; max-height:
+      400px; display: block; margin: 10px auto; } /* Mobile responsive styles */
+      @media screen and (max-width: 600px) { .container { padding: 10px; }
+      .details-table, .vehicles-table { font-size: 9pt; } .details-table td,
+      .vehicles-table td { padding: 4px 2px; font-size: 8pt; } .details-table
+      th, .vehicles-table th { padding: 4px 2px; font-size: 8pt; }
+      .vehicles-table th { font-size: 7pt; } .vehicles-table td { font-size:
+      7pt; } .payment-image { max-width: 95%; max-height: 300px; } } @media
+      screen and (max-width: 480px) { .vehicles-table { font-size: 7pt; }
+      .vehicles-table th, .vehicles-table td { padding: 2px 1px; font-size: 6pt;
+      } .payment-image { max-width: 90%; max-height: 250px; } }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+	
+	<!-- Greeting Section -->
+      <div class="greeting">
+        <strong>السلام عليكم ورحمة الله وبركاته</strong>
+      </div>
+
+
+      <!-- Welcome Box -->
+      <div class="confirmation-box-warning">
+        <h2 style="color: #d0142b; margin: 0;">⚠️ RENEWAL PENDING</h2>
+        <p style="margin: 10px 0 0 0;">The annual renewal payment of your
+          E-Tracking service is still pending!</p>
+      </div>
+
+      <div class="content">
+
+        Dear customer, we hope you are fine and in good health. Your E-Tracking
+        account will be expired on service tenure end-date as mentioned below
+        and your annual service renewal charges are still pending. Please find
+        your service details, package upgradation options and payment methods
+        below. Kindly pay your pending dues and share the screenshot or slip of
+        payment transfer before expiry date in order to continue your service.
+        We will forward your payment slip to IT team for your E-Tracking account
+        renewal. Thank you.
+      </div>
+
+      <!-- 1st Table: Account & Service Details (with customer details) -->
+      <table class="details-table">
+        <tr>
+          <th colspan="2">Account & Service Details</th>
+        </tr>
+        <tr>
+          <td class="label">Name</td>
+          <td class="value">{{{customerName}}}</td>
+        </tr>
+        <tr>
+          <td class="label">CNIC / NTN</td>
+          <td class="value">{{cnic}}</td>
+        </tr>
+        <tr>
+          <td class="label">Authorized POC</td>
+          <td class="value">{{{contactNumber}}}</td>
+        </tr>
+        <tr>
+          <td class="label">Reference Number</td>
+          <td class="value">{{referenceNumber}}</td>
+        </tr>
+        <!-- <tr> -->
+        <!-- <td class="label">Total Vehicles</td> -->
+        <!-- <td class="value">{{totalVehicles}}</td> -->
+        <!-- </tr> -->
+        <tr>
+          <td class="label">Total Devices</td>
+          <td class="value">{{totalDevices}}</td>
+        </tr>
+        <tr>
+          <td class="label">Service Type</td>
+          <td class="value">Annual Renewal Payment Pending</td>
+        </tr>
+        {{#if notes}}
+          <tr>
+            <td class="label">Additional Notes</td>
+            <td class="value">{{{notes}}}</td>
+          </tr>
+        {{/if}}
+      </table>
+
+
+      <!-- 2nd Table: Vehicles (with tenure end date) -->
+      {{#if vehicles}}
+        <table class="vehicles-table">
+          <tr>
+            <th>Unit #</th>
+            <th>Reg #</th>
+            <th>Model</th>
+            <th>Package</th>
+            <th>Amount</th>
+            <th>Expiry Date</th>
+          </tr>
+          {{#each vehicles}}
+            <tr>
+              <td>{{rank}}</td>
+              <td>{{regNumber}}</td>
+              <td>{{model}}</td>
+              <td>{{package}}</td>
+              <td class="amount-highlight">{{amount}}</td>
+              <td>{{endDate}}</td>
+            </tr>
+          {{/each}}
+          <tr style="background-color: #f8f9fa;">
+            <td colspan="4" style="font-weight: bold; text-align: right;">TOTAL
+              AMOUNT PAYABLE:</td>
+
+            <td
+              class="amount-highlight"
+              style="font-weight: bold;"
+            >{{totalAmount}}</td>
+            <td></td>
+          </tr>
+        </table>
+      {{/if}}
+
+      <div class="content">
+        <strong class="urgent">Service Expiry Date: {{expiryDate}}</strong>
+      </div>
+
+
+
+      <!-- Section - Payment Methods -->
+      <div class="content">
+        <hr style="border: 1px solid #009900; margin: 20px 0;" />
+        <strong><u>PAYMENT METHODS:</u></strong><br />
+        Dear customer, now you can easily pay your dues online through following
+        methods:<br /><br />
+
+        <strong>Method-1 Easy Paisa Transfer</strong><br />
+        Title: E-Tracking Solutions<br />
+        Pay by Till Number: 0212135<br />
+        Pay by scanning QR code attached below or download here:
+        <a
+          href="https://etracking.pk/easypaisa"
+          target="_blank"
+        >https://etracking.pk/easypaisa</a><br />
+        Clearance time: same day if paid before COB<br /><br />
+
+        <strong>Method-2 Meezan Bank Limited</strong><br />
+        Branch: Islampura, Lahore<br />
+        Title CEO: Mian Nirwan Farooqi<br />
+        Account #: 0237-0101292005<br />
+        IBAN #: PK22MEZN0002370101292005<br />
+        Clearance time: same day if paid before COB<br /><br />
+
+      </div>
+
+      <div class="content" style="text-align: center;">
+        <img
+          src="cid:payment-options"
+          alt="Payment Options QR Code"
+          class="payment-image"
+        />
+      </div>
+
+      <div class="content">
+        <strong>Kindly share the screenshot of payment transferred here or on
+          official WhatsApp, so we can forward to IT team for renewal of your
+          E-Tracking account. Thank you.</strong><br /><br />
+        <u><i>Note: Any payment on any other account or by any other method will
+            not be acceptable.</i></u>
+      </div>
+
+      <br />
+      <br />
+
+
+      <!-- Signature -->
+      <div class="content" style="text-align: center;">
+        <img
+          src="https://etracking.pk/wp-content/uploads/2018/10/ETS-revamped-Header-Logo-2018-Hi-tiny.png"
+          alt="E-Tracking Logo"
+        />
+      </div>
+
+      <div class="signature">
+        <div>
+          Regards,<br />
+          <br />
+          <strong>Support Team</strong><br />
+          E-Tracking Solutions<br />
+          <br />
+          Email: support@etracking.pk<br />
+          Website: https://etracking.pk<br />
+          Helpline:
+          <a href="tel:+923111277547" target="_blank">
+            03-111-277-547</a><br />
+
+          WhatsApp:
+          <a href="https://wa.me/923111277547" target="_blank">
+            03-111-277-547</a><br />
+
+        </div>
+      </div>
+
+      <!-- Contact Info -->
+      <div class="contact-info">
+        This is an automated renewal reminder sent by E-Tracking Solutions.
+        Please contact our support team at support@etracking.pk if you have any
+        questions about your account or payment options.
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Test</title>
+    <style>
+        body { font-family: monospace; padding: 20px; }
+        .test { background: #f0f0f0; padding: 10px; margin: 10px 0; border-left: 3px solid blue; }
+        .success { border-color: green; }
+        .error { border-color: red; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+        pre { background: #ddd; padding: 10px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>API Test Page</h1>
+    
+    <button onclick="testStatus()">1. Test Status</button>
+    <button onclick="uploadCSV()">2. Upload CSV</button>
+    <button onclick="testPreview()">3. Test Preview</button>
+    
+    <div id="results"></div>
+
+    <script>
+        async function testStatus() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML += '<div class="test"><h3>Testing /api/status...</h3>';
+            try {
+                const res = await fetch('/api/status');
+                const data = await res.json();
+                resultsDiv.innerHTML += '<p>Status: ' + (data.success ? '✅' : '❌') + '</p>';
+                resultsDiv.innerHTML += '<pre>' + JSON.stringify(data, null, 2) + '</pre></div>';
+            } catch (e) {
+                resultsDiv.innerHTML += '<p>Error: ' + e.message + '</p></div>';
+            }
+        }
+
+        async function uploadCSV() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML += '<div class="test"><h3>Uploading CSV...</h3>';
+            try {
+                // Create a test CSV blob
+                const csv = 'email,customer_name,etc_number,email-template\ntest1@example.com,John Doe,12345,renewal-pending\ntest2@example.com,Jane Smith,12346,new-account';
+                const blob = new Blob([csv], { type: 'text/csv' });
+                const formData = new FormData();
+                formData.append('file', blob, 'test.csv');
+                
+                const res = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
+                resultsDiv.innerHTML += '<p>Upload: ' + (data.success ? '✅' : '❌') + '</p>';
+                resultsDiv.innerHTML += '<pre>' + JSON.stringify(data, null, 2) + '</pre></div>';
+            } catch (e) {
+                resultsDiv.innerHTML += '<p>Error: ' + e.message + '</p></div>';
+            }
+        }
+
+        async function testPreview() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML += '<div class="test"><h3>Testing /api/preview...</h3>';
+            try {
+                const res = await fetch('/api/preview', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ recordIndex: 0 })
+                });
+                const data = await res.json();
+                resultsDiv.innerHTML += '<p>Preview: ' + (data.success ? '✅' : '❌') + '</p>';
+                if (data.success) {
+                    resultsDiv.innerHTML += '<p>Template: ' + data.template + '</p>';
+                    resultsDiv.innerHTML += '<p>Email: ' + data.customer.email + '</p>';
+                    resultsDiv.innerHTML += '<p>HTML Length: ' + data.html.length + '</p>';
+                    resultsDiv.innerHTML += '<iframe style="width:100%; height:300px; border:1px solid #ccc;" srcdoc="' + data.html.replace(/"/g, '&quot;') + '"></iframe>';
+                } else {
+                    resultsDiv.innerHTML += '<p>Error: ' + data.error + '</p>';
+                }
+                resultsDiv.innerHTML += '</div>';
+            } catch (e) {
+                resultsDiv.innerHTML += '<p>Error: ' + e.message + '</p></div>';
+            }
+        }
+    </script>
+</body>
+</html>
