@@ -77,6 +77,10 @@ eTracking-Emailer/
 ├── logs/
 │   └── email-log.txt          # All send activity log
 ├── output/                    # Dry-run HTML preview files
+├── docs/                      # Reference documentation (architecture, setup guides, changelogs)
+├── tests/                     # Test scripts and sample files
+├── start-gui.bat              # Windows launcher (double-click to start)
+├── start-gui.ps1              # PowerShell launcher
 ├── package.json
 └── .env                       # Email credentials (not committed)
 ```

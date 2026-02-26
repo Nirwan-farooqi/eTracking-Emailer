@@ -28,7 +28,7 @@
 
 ### Core GUI Documentation
 - **[GETTING-STARTED-GUI.md](GETTING-STARTED-GUI.md)** - New user guide
-- **[gui/README.md](gui/README.md)** - Full GUI documentation
+- **[gui/README.md](../gui/README.md)** - Full GUI documentation
 - **[GUI-SETUP.md](GUI-SETUP.md)** - Setup instructions
 
 ### Reference & Architecture
@@ -41,7 +41,7 @@
 - **[YOU-ARE-READY.md](YOU-ARE-READY.md)** - Completion checklist
 
 ### Original Documentation
-- **[README.md](README.md)** - Original utility docs
+- **[README.md](../README.md)** - Original utility docs
 - **[QUICK-START.md](QUICK-START.md)** - Original quick start
 
 ---
@@ -58,7 +58,7 @@
 
 **...understand how it works** → [ARCHITECTURE.md](ARCHITECTURE.md)
 
-**...read detailed docs** → [gui/README.md](gui/README.md)
+**...read detailed docs** → [gui/README.md](../gui/README.md)
 
 **...see what was built** → [PROJECT-COMPLETION.md](PROJECT-COMPLETION.md)
 
@@ -73,7 +73,7 @@
 | **Server** | `gui/` | `server.js` |
 | **UI** | `gui/public/` | `index.html` |
 | **Launcher** | Root | `start-gui.bat`, `start-gui.ps1` |
-| **Documentation** | Root | `*.md` files |
+| **Documentation** | `docs/` | `*.md` files |
 | **Templates** | `templates/` | `*.hbs` files |
 | **Configuration** | Root | `.env` |
 | **Logs** | `logs/` | `email-log.txt` |
@@ -101,20 +101,23 @@ Then open: **http://localhost:3000**
 
 ```
 Project Root
-├── 📖 GETTING-STARTED-GUI.md     ← Start here!
-├── 📖 GUI-SETUP.md                ← Setup details
-├── 📖 QUICK-REFERENCE.md          ← Quick lookup
-├── 📖 ARCHITECTURE.md             ← How it works
-├── 📖 GUI-IMPLEMENTATION.md       ← Technical details
-├── 📖 PROJECT-COMPLETION.md       ← What was built
-├── 📖 YOU-ARE-READY.md            ← Completion info
-├── 📖 README.md                   ← Original docs
+├── 📖 README.md                   ← Main documentation
+├── 📁 docs/                       ← All reference docs (you are here)
+│   ├── GETTING-STARTED-GUI.md     ← Start here!
+│   ├── GUI-SETUP.md               ← Setup details
+│   ├── QUICK-REFERENCE.md         ← Quick lookup
+│   ├── ARCHITECTURE.md            ← How it works
+│   ├── GUI-IMPLEMENTATION.md      ← Technical details
+│   └── ...more reference files
+│
+├── 🧪 tests/                      ← Test scripts & sample files
 │
 ├── 🖥️ gui/
 │   ├── server.js                 ← Backend
 │   ├── README.md                 ← GUI reference
 │   ├── public/
-│   │   └── index.html            ← Web interface
+│   │   ├── index.html            ← Web interface
+│   │   └── manual.html           ← User manual
 │   └── uploads/                  ← Temp files
 │
 ├── 🔧 src/
@@ -159,7 +162,7 @@ Project Root
 4. Restart server
 
 ### Task: Troubleshoot Issues
-1. Check: [gui/README.md](gui/README.md#-troubleshooting)
+1. Check: [gui/README.md](../gui/README.md#-troubleshooting)
 2. Look at: `logs/email-log.txt`
 3. Review: [QUICK-REFERENCE.md](QUICK-REFERENCE.md)
 
@@ -176,9 +179,9 @@ Project Root
 |---------|----------|-----------|
 | Server won't start | Check Node.js, port 3000 | [GUI-SETUP.md](GUI-SETUP.md#-troubleshooting) |
 | Email not sending | Check .env credentials | [GUI-SETUP.md](GUI-SETUP.md#-environment-variables) |
-| CSV won't upload | Verify CSV format | [gui/README.md](gui/README.md#-csv-format) |
+| CSV won't upload | Verify CSV format | [gui/README.md](../gui/README.md#-csv-format) |
 | Port 3000 in use | Change GUI_PORT in .env | [QUICK-REFERENCE.md](QUICK-REFERENCE.md) |
-| Template not found | Check templates/ folder | [gui/README.md](gui/README.md#-template-variables) |
+| Template not found | Check templates/ folder | [gui/README.md](../gui/README.md#-template-variables) |
 
 ---
 
@@ -187,7 +190,7 @@ Project Root
 1. **New User?** → Start with [GETTING-STARTED-GUI.md](GETTING-STARTED-GUI.md)
 2. **Need Setup Help?** → Read [GUI-SETUP.md](GUI-SETUP.md)
 3. **Quick Lookup?** → Use [QUICK-REFERENCE.md](QUICK-REFERENCE.md)
-4. **Want Details?** → Check [gui/README.md](gui/README.md)
+4. **Want Details?** → Check [gui/README.md](../gui/README.md)
 5. **Curious About Design?** → See [ARCHITECTURE.md](ARCHITECTURE.md)
 6. **Implementation Details?** → Read [GUI-IMPLEMENTATION.md](GUI-IMPLEMENTATION.md)
 
@@ -211,14 +214,14 @@ Project Root
 ### Documentation
 - [Quick Start](GETTING-STARTED-GUI.md)
 - [Setup Guide](GUI-SETUP.md)
-- [Full Reference](gui/README.md)
+- [Full Reference](../gui/README.md)
 - [Architecture](ARCHITECTURE.md)
 
 ### Project Files
-- [Backend Server](gui/server.js)
-- [Web Interface](gui/public/index.html)
-- [Templates Directory](templates/)
-- [Configuration](package.json)
+- [Backend Server](../gui/server.js)
+- [Web Interface](../gui/public/index.html)
+- [Templates Directory](../templates/)
+- [Configuration](../package.json)
 
 ### External Resources
 - [Node.js Documentation](https://nodejs.org/docs)
