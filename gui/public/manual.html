@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Manual — eTracking Email Portal</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 30px 20px 60px;
+      color: #222;
+    }
+
+    .page {
+      max-width: 860px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.28);
+      overflow: hidden;
+    }
+
+    /* ── Header ── */
+    .page-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 36px 40px 28px;
+      color: #fff;
+      position: relative;
+    }
+    .page-header h1 { font-size: 26px; font-weight: 700; margin-bottom: 6px; }
+    .page-header p  { font-size: 14px; opacity: .85; }
+
+    .back-btn {
+      position: absolute;
+      top: 28px; right: 36px;
+      background: rgba(255,255,255,.18);
+      border: 1px solid rgba(255,255,255,.35);
+      color: #fff;
+      padding: 8px 18px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background .2s;
+    }
+    .back-btn:hover { background: rgba(255,255,255,.3); }
+
+    /* ── TOC ── */
+    .toc {
+      background: #f4f6ff;
+      border-bottom: 1px solid #e0e4f5;
+      padding: 20px 40px;
+    }
+    .toc h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .07em; color: #667eea; margin-bottom: 10px; }
+    .toc ol  { padding-left: 18px; }
+    .toc li  { font-size: 13px; line-height: 2; }
+    .toc a   { color: #555; text-decoration: none; }
+    .toc a:hover { color: #667eea; text-decoration: underline; }
+
+    /* ── Body ── */
+    .content { padding: 40px; }
+
+    section { margin-bottom: 48px; }
+    section:target { scroll-margin-top: 20px; }
+
+    h2.section-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #333;
+      border-bottom: 2px solid #667eea;
+      padding-bottom: 8px;
+      margin-bottom: 20px;
+    }
+    h3 { font-size: 15px; font-weight: 700; color: #444; margin: 20px 0 8px; }
+
+    p  { font-size: 14px; line-height: 1.75; color: #444; margin-bottom: 12px; }
+    ul, ol { padding-left: 20px; margin-bottom: 12px; }
+    li { font-size: 14px; line-height: 1.9; color: #444; }
+    li strong { color: #333; }
+
+    code {
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 12.5px;
+      background: #f0f4ff;
+      border: 1px solid #d8e0ff;
+      border-radius: 4px;
+      padding: 1px 6px;
+      color: #3730a3;
+    }
+    pre {
+      background: #1e1e2e;
+      color: #cdd6f4;
+      border-radius: 8px;
+      padding: 16px 20px;
+      font-size: 13px;
+      line-height: 1.65;
+      overflow-x: auto;
+      margin: 14px 0 20px;
+    }
+    pre code { background: none; border: none; color: inherit; padding: 0; font-size: inherit; }
+
+    /* ── Steps ── */
+    .steps-grid { display: flex; gap: 16px; flex-wrap: wrap; margin: 16px 0; }
+    .step-card {
+      flex: 1 1 220px;
+      background: #f8f9ff;
+      border: 1px solid #e0e4f5;
+      border-radius: 10px;
+      padding: 18px;
+    }
+    .step-card .step-num {
+      width: 32px; height: 32px;
+      background: #667eea; color: #fff;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 15px;
+      margin-bottom: 10px;
+    }
+    .step-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+    .step-card p  { font-size: 13px; margin: 0; color: #555; }
+
+    /* ── Tables ── */
+    table { width: 100%; border-collapse: collapse; margin: 14px 0 20px; font-size: 13px; }
+    th { background: #667eea; color: #fff; text-align: left; padding: 9px 12px; font-weight: 600; }
+    td { padding: 9px 12px; border-bottom: 1px solid #eee; vertical-align: top; }
+    tr:hover td { background: #fafbff; }
+
+    /* ── Callouts ── */
+    .callout {
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin: 16px 0;
+      font-size: 13.5px;
+      line-height: 1.65;
+    }
+    .callout-tip    { background: #e8f5e9; border-left: 4px solid #4caf50; color: #1b5e20; }
+    .callout-warn   { background: #fff3e0; border-left: 4px solid #ff9800; color: #5d3000; }
+    .callout-info   { background: #e3f2fd; border-left: 4px solid #2196f3; color: #0d47a1; }
+    .callout-danger { background: #ffebee; border-left: 4px solid #f44336; color: #7f0000; }
+    .callout strong { display: block; margin-bottom: 4px; font-size: 13px; text-transform: uppercase; letter-spacing: .04em; }
+
+    /* ── Footer ── */
+    .page-footer {
+      background: #f8f9fa;
+      border-top: 1px solid #eee;
+      text-align: center;
+      padding: 18px;
+      font-size: 12px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="page-header">
+    <h1>📖 User Manual</h1>
+    <p>eTracking Email Portal — complete guide to uploading, previewing, and sending emails</p>
+    <a href="/" class="back-btn">← Back to Portal</a>
+  </div>
+
+  <!-- TOC -->
+  <div class="toc">
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#overview">System Overview</a></li>
+      <li><a href="#preparation">Before You Start — CSV Preparation</a></li>
+      <li><a href="#sending">Step-by-Step: Sending Emails via GUI</a></li>
+      <li><a href="#csv-columns">CSV Column Reference</a></li>
+      <li><a href="#templates">Email Templates</a></li>
+      <li><a href="#multi-vehicle">Multi-Vehicle Accounts</a></li>
+      <li><a href="#preview">Previewing Emails</a></li>
+      <li><a href="#progress">Live Progress During Send</a></li>
+      <li><a href="#results">Reading the Results Table</a></li>
+      <li><a href="#logs">Email Log File</a></li>
+      <li><a href="#cli">Advanced: CLI Usage</a></li>
+      <li><a href="#troubleshooting">Troubleshooting</a></li>
+    </ol>
+  </div>
+
+  <div class="content">
+
+    <!-- 1 -->
+    <section id="overview">
+      <h2 class="section-title">1. System Overview</h2>
+      <p>The <strong>eTracking Email Portal</strong> is a web-based tool for sending bulk, personalised HTML emails to eTracking customers. You upload a CSV file exported from the team records sheet, preview the generated emails, and send them — all from a browser.</p>
+      <p>Key capabilities:</p>
+      <ul>
+        <li><strong>Multi-vehicle grouping</strong> — customers with multiple vehicles receive <em>one</em> email listing all their vehicles, not one per row.</li>
+        <li><strong>Template-driven</strong> — each CSV row specifies which email template to use (renewal reminder, new account, device transfer, etc.).</li>
+        <li><strong>Live progress</strong> — a progress bar updates in real-time as each email is sent; you don't wait until all are done.</li>
+        <li><strong>Payment image embedded</strong> — the payment QR / options image is automatically embedded inline in renewal emails.</li>
+        <li><strong>Markdown notes</strong> — the <code>notes</code> column supports Markdown formatting.</li>
+      </ul>
+    </section>
+
+    <!-- 2 -->
+    <section id="preparation">
+      <h2 class="section-title">2. Before You Start — CSV Preparation</h2>
+
+      <h3>Export the CSV</h3>
+      <p>Download the CSV from the team records sheet. Make sure it includes all required columns (see <a href="#csv-columns">CSV Column Reference</a>).</p>
+
+      <h3>Fill in the <code>email-template</code> column</h3>
+      <p>Every row <strong>must</strong> have a value in the <code>email-template</code> column. Valid values:</p>
+      <table>
+        <tr><th>Value</th><th>When to use</th></tr>
+        <tr><td><code>renewal-pending</code></td><td>Customer's renewal payment is due — includes payment methods and QR image</td></tr>
+        <tr><td><code>renewal-done</code></td><td>Customer has paid — sends renewal confirmation</td></tr>
+        <tr><td><code>new-account</code></td><td>Brand new customer — sends welcome + account setup details</td></tr>
+        <tr><td><code>device-transfer</code></td><td>Device moved to a different vehicle</td></tr>
+        <tr><td><code>device-redo</code></td><td>Device reinstalled / redone</td></tr>
+        <tr><td><code>device-addition</code></td><td>New device added to existing account</td></tr>
+      </table>
+
+      <div class="callout callout-warn">
+        <strong>⚠ Important</strong>
+        If any row has an empty or invalid <code>email-template</code> value, the upload will fail with an error. Fix the CSV and re-upload.
+      </div>
+
+      <h3>Check the <code>Send-Email-To</code> column</h3>
+      <p>This must be a valid email address. Rows with a missing or invalid email address will be skipped with a FAILED status in the results.</p>
+
+      <h3>Empty rows at the bottom</h3>
+      <p>Excel often adds hundreds of blank rows at the end of CSV exports. These are automatically ignored — the record count shown after upload will reflect only real data rows.</p>
+    </section>
+
+    <!-- 3 -->
+    <section id="sending">
+      <h2 class="section-title">3. Step-by-Step: Sending Emails via GUI</h2>
+
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-num">1</div>
+          <h4>Upload CSV</h4>
+          <p>Drag-and-drop or click the upload area. The system groups rows by ETC number and shows the customer count.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">2</div>
+          <h4>Preview</h4>
+          <p>Enter a record number and click <strong>Preview Email</strong> to inspect the rendered email before sending.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">3</div>
+          <h4>Send</h4>
+          <p>Click <strong>Send Emails</strong>. Watch the live progress bar and per-email results as they stream in.</p>
+        </div>
+      </div>
+
+      <div class="callout callout-info">
+        <strong>ℹ Configuration check</strong>
+        The header shows <strong>✅ Configured</strong> or <strong>❌ Not Configured</strong>. If not configured, email credentials are missing from the <code>.env</code> file — contact the system administrator.
+      </div>
+
+      <h3>Limit field</h3>
+      <p>In Step 3, the <strong>Limit</strong> field lets you send to only the first N customers from the uploaded CSV. Leave it empty to send to all.</p>
+    </section>
+
+    <!-- 4 -->
+    <section id="csv-columns">
+      <h2 class="section-title">4. CSV Column Reference</h2>
+      <table>
+        <tr><th>Column name</th><th>Required</th><th>Description</th></tr>
+        <tr><td><code>ETC-number</code></td><td>✅ Yes</td><td>Unique account ID (e.g. <code>0055</code>). Multiple rows with the same ETC are grouped into one email.</td></tr>
+        <tr><td><code>Customer-Name</code></td><td>✅ Yes</td><td>Full customer name. Multi-line names (with S/O, W/O, D/O lines) are supported.</td></tr>
+        <tr><td><code>Customer-Contact</code></td><td>✅ Yes</td><td>Phone number(s). Multiple numbers separated by newlines are supported.</td></tr>
+        <tr><td><code>Send-Email-To</code></td><td>✅ Yes</td><td>Recipient email address.</td></tr>
+        <tr><td><code>CNIC</code></td><td>✅ Yes</td><td>CNIC or NTN number.</td></tr>
+        <tr><td><code>Vehicle-Rank</code></td><td>✅ Yes</td><td>Vehicle sequence number within the account (1, 2, 3…). Used to sort the vehicles table in the email.</td></tr>
+        <tr><td><code>Vehicle-Reg-number</code></td><td>✅ Yes</td><td>Vehicle registration number.</td></tr>
+        <tr><td><code>Vehicle-Model</code></td><td>✅ Yes</td><td>Vehicle make and model (e.g. <code>Honda City 2021</code>).</td></tr>
+        <tr><td><code>Package-Activated</code></td><td>✅ Yes</td><td>Package name (e.g. <code>LTV Platinum</code>).</td></tr>
+        <tr><td><code>Payment-Amount</code></td><td>✅ Yes</td><td>Amount due (e.g. <code>Rs 8,000</code>).</td></tr>
+        <tr><td><code>Tenure-Start-Date</code></td><td>✅ Yes</td><td>Service start date (e.g. <code>23-Mar-2025</code>).</td></tr>
+        <tr><td><code>Tenure-Ending-Date</code></td><td>✅ Yes</td><td>Service expiry date. The earliest date across all vehicles is shown as the main expiry.</td></tr>
+        <tr><td><code>Tenure-Length</code></td><td>✅ Yes</td><td>Duration string (e.g. <code>1 Year</code>).</td></tr>
+        <tr><td><code>email-template</code></td><td>✅ Yes</td><td>Template identifier. See <a href="#templates">Email Templates</a>.</td></tr>
+        <tr><td><code>notes</code></td><td>Optional</td><td>Free-text notes shown in the email. Supports <strong>Markdown</strong> formatting.</td></tr>
+        <tr><td><code>installation-date</code></td><td>Optional</td><td>Used in <code>new-account</code> template.</td></tr>
+        <tr><td><code>credentials</code></td><td>Optional</td><td>App login credentials. Supports Markdown. Used in <code>new-account</code> template.</td></tr>
+        <tr><td><code>mobile-for-alerts</code></td><td>Optional</td><td>Mobile number registered for SMS alerts.</td></tr>
+        <tr><td><code>geofence-city</code></td><td>Optional</td><td>City used for geofence setup.</td></tr>
+      </table>
+    </section>
+
+    <!-- 5 -->
+    <section id="templates">
+      <h2 class="section-title">5. Email Templates</h2>
+      <p>Templates are <code>.hbs</code> (Handlebars) files stored in the <code>templates/</code> folder on the server. Each template receives the full customer data including the list of all vehicles.</p>
+
+      <table>
+        <tr><th>Template</th><th>What it sends</th><th>Special behaviour</th></tr>
+        <tr>
+          <td><code>renewal-pending</code></td>
+          <td>⚠️ Renewal reminder with pending payment notice</td>
+          <td>Automatically embeds the <strong>payment options QR image</strong> (Easypaisa + bank details)</td>
+        </tr>
+        <tr>
+          <td><code>renewal-done</code></td>
+          <td>✅ Renewal confirmation</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><code>new-account</code></td>
+          <td>🎉 Welcome email for new customers</td>
+          <td>Shows installation date, app credentials, alert mobile, geofence city</td>
+        </tr>
+        <tr>
+          <td><code>device-transfer</code></td>
+          <td>🔄 Device moved to a new vehicle</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><code>device-redo</code></td>
+          <td>🔧 Device reinstalled</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><code>device-addition</code></td>
+          <td>➕ New device added to account</td>
+          <td>—</td>
+        </tr>
+      </table>
+
+      <h3>Mixed templates in one account</h3>
+      <p>If a customer's vehicles have different template values, the system picks the highest-priority one:</p>
+      <ol>
+        <li><code>renewal-done</code></li>
+        <li><code>device-transfer</code> / <code>device-addition</code> / <code>device-redo</code></li>
+        <li><code>new-account</code></li>
+        <li><code>renewal-pending</code></li>
+      </ol>
+    </section>
+
+    <!-- 6 -->
+    <section id="multi-vehicle">
+      <h2 class="section-title">6. Multi-Vehicle Accounts</h2>
+      <p>A customer with multiple vehicles will appear as <strong>multiple rows</strong> in the CSV, all sharing the same <code>ETC-number</code>.</p>
+
+      <div class="callout callout-tip">
+        <strong>✅ What the system does</strong>
+        All rows with the same ETC number are automatically merged into <strong>one customer object</strong>. Only <strong>one email</strong> is sent listing every vehicle in a table. The total payable amount is the sum of all vehicle amounts. The expiry date shown is the earliest expiry across all vehicles.
+      </div>
+
+      <p><strong>Example:</strong> ETC-0189 (Ifran Iqbal) has 5 rows in the CSV. The portal shows 1 customer record, sends 1 email, and that email contains a table of all 5 vehicles.</p>
+
+      <p>You can verify this by uploading the CSV and checking the <strong>Records</strong> count — it shows unique customers, not raw rows.</p>
+    </section>
+
+    <!-- 7 -->
+    <section id="preview">
+      <h2 class="section-title">7. Previewing Emails</h2>
+      <p>After uploading a CSV, you can preview any customer's email before sending:</p>
+      <ol>
+        <li>Enter the customer record number (1 = first customer, 2 = second, etc.) in the <strong>Record</strong> field.</li>
+        <li>Click <strong>🔍 Preview Email</strong>.</li>
+        <li>The rendered email appears in an iframe below, exactly as the customer will receive it — including the payment QR image.</li>
+      </ol>
+
+      <div class="callout callout-info">
+        <strong>ℹ Payment image in preview</strong>
+        The <code>renewal-pending</code> template embeds the payment QR image using a standard email technique (CID attachment). In the browser preview it is shown as a data URL so it renders correctly. In the actual email, it is a proper inline image attachment.
+      </div>
+
+      <p>To check a customer after previewing: look at the preview header which shows the customer email, template name, and which record out of the total you are viewing.</p>
+    </section>
+
+    <!-- 8 -->
+    <section id="progress">
+      <h2 class="section-title">8. Live Progress During Send</h2>
+      <p>When you click <strong>🚀 Send Emails</strong>, the portal does <em>not</em> wait for all emails to finish before showing results. Instead it uses a real-time stream:</p>
+      <ul>
+        <li>A <strong>progress bar</strong> fills as each email is processed.</li>
+        <li>The label shows: <code>Sending... 12 / 56 &nbsp; ✅ 12 &nbsp; ❌ 0</code></li>
+        <li>Each email's result row appears in the table <strong>immediately</strong> after it is sent.</li>
+        <li>When all done, the bar turns full and shows: <code>Done! ✅ Sent: 56 ❌ Failed: 0 📊 Total: 56</code></li>
+      </ul>
+
+      <div class="callout callout-warn">
+        <strong>⚠ Do not close the browser tab</strong>
+        While sending is in progress, keep the browser tab open. Closing it will disconnect the live stream (emails that have already been sent will not be resent, but you will lose visibility of remaining progress).
+      </div>
+    </section>
+
+    <!-- 9 -->
+    <section id="results">
+      <h2 class="section-title">9. Reading the Results Table</h2>
+      <table>
+        <tr><th>Column</th><th>Meaning</th></tr>
+        <tr><td><strong>ETC #</strong></td><td>Customer account number from the CSV</td></tr>
+        <tr><td><strong>Email</strong></td><td>Address the email was sent to (<code>Send-Email-To</code> column)</td></tr>
+        <tr><td><strong>Template</strong></td><td>Which template was used</td></tr>
+        <tr><td><strong>Status</strong></td><td><code>SUCCESS</code> — sent OK &nbsp;|&nbsp; <code>FAILED</code> — not sent (see Message)</td></tr>
+        <tr><td><strong>Message</strong></td><td>Confirmation text or the error reason if failed</td></tr>
+      </table>
+
+      <p>Common failure reasons:</p>
+      <ul>
+        <li><strong>No email address</strong> — <code>Send-Email-To</code> column was empty or invalid.</li>
+        <li><strong>Template not found</strong> — the <code>email-template</code> value doesn't match any file in <code>templates/</code>.</li>
+        <li><strong>SMTP error</strong> — network / authentication issue. Check <code>.env</code> credentials.</li>
+      </ul>
+    </section>
+
+    <!-- 10 -->
+    <section id="logs">
+      <h2 class="section-title">10. Email Log File</h2>
+      <p>Every send attempt (success, failure, or dry-run) is recorded in <code>logs/email-log.txt</code> on the server:</p>
+      <pre><code>2026-02-26T10:00:00.000Z | SUCCESS | ETC: 0055 | John Doe | john@example.com | Message ID: &lt;abc123&gt;
+2026-02-26T10:00:02.000Z | FAILED  | ETC: 0221 | Jane Doe | jane@example.com | Connection timeout
+2026-02-26T10:00:04.000Z | DRY_RUN | ETC: 0189 | Iqbal    | iqbal@ex.com     | Email prepared but not sent</code></pre>
+      <p>This log is append-only. It grows over time and can be reviewed to audit when and to whom emails were sent.</p>
+    </section>
+
+    <!-- 11 -->
+    <section id="cli">
+      <h2 class="section-title">11. Advanced: CLI Usage</h2>
+      <p>The CLI processes all CSV files in the <code>customers/</code> folder and supports powerful filtering options.</p>
+
+      <pre><code># Preview only — no emails sent
+node src/index.js --dry-run
+
+# Send all customers in customers/ folder
+node src/index.js
+
+# Send to specific ETC numbers only
+node src/index.js --etc 0055 0221 0189
+
+# Only customers expiring within 7 days
+node src/index.js --expiry 7
+
+# Filter by package keyword
+node src/index.js --package Platinum
+
+# Limit to first 10 customers
+node src/index.js --limit 10
+
+# Skip the "are you sure?" confirmation
+node src/index.js --yes
+
+# Custom CSV folder
+node src/index.js --folder ./exports/march
+
+# Slower sending (5 seconds between emails)
+node src/index.js --delay 5000</code></pre>
+
+      <h3>Processed files</h3>
+      <p>After a successful CLI run, CSV files are moved from <code>customers/</code> to <code>processed/</code> with a timestamp prefix. Running again with the same file will skip it (unless the file content has changed).</p>
+
+      <div class="callout callout-tip">
+        <strong>✅ Tip — dry-run first</strong>
+        Always run with <code>--dry-run</code> first to see a summary of who will be emailed before actually sending. Dry-run output HTML files are saved in <code>output/</code> for manual inspection.
+      </div>
+    </section>
+
+    <!-- 12 -->
+    <section id="troubleshooting">
+      <h2 class="section-title">12. Troubleshooting</h2>
+      <table>
+        <tr><th>Problem</th><th>Cause</th><th>Fix</th></tr>
+        <tr>
+          <td>❌ Not Configured in header</td>
+          <td>Missing <code>.env</code> credentials</td>
+          <td>Ask system admin to set <code>EMAIL_USER</code>, <code>EMAIL_PASS</code>, <code>FROM_NAME</code>, <code>FROM_EMAIL</code> in <code>.env</code></td>
+        </tr>
+        <tr>
+          <td>Upload fails with "email template" error</td>
+          <td>A row has empty or invalid <code>email-template</code> value</td>
+          <td>Open the CSV, find blank cells in the <code>email-template</code> column, fill them with a valid value (e.g. <code>renewal-pending</code>)</td>
+        </tr>
+        <tr>
+          <td>Record count seems too high</td>
+          <td>Excel adds many empty rows</td>
+          <td>No action needed — empty rows are ignored automatically. Record count = unique customers.</td>
+        </tr>
+        <tr>
+          <td>FAILED — No email address</td>
+          <td><code>Send-Email-To</code> column is empty for that row</td>
+          <td>Add the email address in the CSV and re-upload</td>
+        </tr>
+        <tr>
+          <td>SMTP auth error</td>
+          <td>Wrong password / not using App Password</td>
+          <td>Generate an App Password from your email provider and use that instead of your login password</td>
+        </tr>
+        <tr>
+          <td>Emails going to spam</td>
+          <td>SPF/DKIM not aligned</td>
+          <td>Ensure <code>FROM_EMAIL</code> matches <code>EMAIL_USER</code>; confirm SPF and DKIM records are set on the domain</td>
+        </tr>
+        <tr>
+          <td>Payment image not showing</td>
+          <td><code>templates/payment-options.jpeg</code> missing</td>
+          <td>Place the payment QR image at <code>templates/payment-options.jpeg</code> on the server</td>
+        </tr>
+        <tr>
+          <td>Only seeing spinner, never finishes</td>
+          <td>Server crashed during send</td>
+          <td>Refresh, re-upload CSV, check server logs in the terminal window</td>
+        </tr>
+      </table>
+
+      <div class="callout callout-danger">
+        <strong>🚨 Never send twice</strong>
+        There is no de-duplication check against previously sent emails. If you upload the same CSV and click Send again, emails will be sent again. Always confirm with the team before re-sending.
+      </div>
+    </section>
+
+  </div><!-- /content -->
+
+  <div class="page-footer">
+    eTracking Email Portal &mdash; Internal Use Only &mdash; eTracking Solutions
+  </div>
+
+</div><!-- /page -->
+</body>
+</html>

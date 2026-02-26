@@ -153,9 +153,10 @@ class EmailSender {
       }
 
       // Save HTML to output folder in dry-run mode for preview
+      const outputDir = path.join(__dirname, "../output");
+      await fs.ensureDir(outputDir);
       const outputPath = path.join(
-        __dirname,
-        "../output",
+        outputDir,
         `${customer.etcNumber}-${templateName}-preview.html`
       );
       await fs.writeFile(outputPath, htmlContent);

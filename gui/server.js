@@ -4,7 +4,6 @@ const cors = require("cors");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs-extra");
-const csv = require("csv-parser");
 
 // Import existing utility classes
 const EmailSender = require("../src/emailSender");
@@ -45,6 +44,12 @@ let currentCustomers = [];
  * Initialize email service
  */
 async function initializeEmailService() {
+  // Always ensure templateEngine is initialized regardless of email config
+  if (!templateEngine) {
+    templateEngine = new TemplateEngine();
+    templateEngine.registerHelpers();
+  }
+
   const requiredVars = [
     "EMAIL_USER",
     "EMAIL_PASS",
@@ -73,11 +78,6 @@ async function initializeEmailService() {
     EMAIL_DELAY: parseInt(process.env.EMAIL_DELAY) || 2000,
   };
 
-  if (!templateEngine) {
-    templateEngine = new TemplateEngine();
-    templateEngine.registerHelpers();
-  }
-
   return { success: true, config: emailConfig };
 }
 
@@ -102,29 +102,20 @@ app.post("/api/upload", upload.single("file"), async (req, res) => {
       return res.status(400).json({ success: false, error: "No file uploaded" });
     }
 
-    const filePath = req.file.path;
-    const customers = [];
+    // Use CSVBatchProcessor to group rows by ETC number — same as CLI
+    const processor = new CSVBatchProcessor();
+    await processor.processSingleCSV(req.file.path, req.file.originalname);
+    processor.finalizeCustomerTemplates();
+    currentCustomers = processor.getCustomersData();
 
-    // Parse CSV file
-    fs.createReadStream(filePath)
-      .pipe(csv())
-      .on("data", (row) => {
-        customers.push(row);
-      })
-      .on("end", () => {
-        currentCustomers = customers;
-        res.json({
-          success: true,
-          filename: req.file.filename,
-          originalName: req.file.originalname,
-          recordCount: customers.length,
-          sampleRecord: customers[0],
-          columns: customers.length > 0 ? Object.keys(customers[0]) : [],
-        });
-      })
-      .on("error", (error) => {
-        res.status(400).json({ success: false, error: error.message });
-      });
+    res.json({
+      success: true,
+      filename: req.file.filename,
+      originalName: req.file.originalname,
+      recordCount: currentCustomers.length,
+      sampleRecord: currentCustomers[0] || null,
+      columns: currentCustomers.length > 0 ? Object.keys(currentCustomers[0]) : [],
+    });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
@@ -150,26 +141,8 @@ app.post("/api/preview", async (req, res) => {
       return res.status(400).json({ success: false, error: `Record index ${recordIndex} not found` });
     }
 
-    const rawCustomer = currentCustomers[recordIndex];
-    console.log(`   Customer: ${rawCustomer['Customer-Name']}`);
-
-    // Preprocess raw CSV data to match template engine expectations (same as /api/send)
-    const customer = {
-      email: rawCustomer['Send-Email-To'] || rawCustomer.email || "N/A",
-      customerName: rawCustomer['Customer-Name'] || rawCustomer.customerName || "Customer",
-      etcNumber: rawCustomer['ETC-number'] || rawCustomer.etcNumber || "0000",
-      cnic: rawCustomer['CNIC'] || rawCustomer.cnic || "N/A",
-      contactNumber: rawCustomer['Customer-Contact'] || rawCustomer.contactNumber || "N/A",
-      totalAmount: rawCustomer['Payment-Amount'] || rawCustomer.totalAmount || "N/A",
-      expiryDate: rawCustomer['Tenure-Ending-Date'] || rawCustomer.expiryDate || "N/A",
-      installationDate: rawCustomer['installation-date'] || rawCustomer.installationDate || null,
-      credentials: rawCustomer['credentials'] || rawCustomer.credentials || null,
-      alertMobile: rawCustomer['mobile-for-alerts'] || rawCustomer.alertMobile || null,
-      residentCity: rawCustomer['geofence-city'] || rawCustomer.residentCity || null,
-      emailTemplate: rawCustomer["email-template"] || rawCustomer["emailTemplate"] || "renewal-pending",
-      notes: rawCustomer['notes'] || rawCustomer.notes || null,
-      ...rawCustomer // Include all original fields for template compatibility
-    };
+    const customer = currentCustomers[recordIndex];
+    console.log(`   Customer: ${customer.customerName} (${customer.vehicles.length} vehicle(s))`);
 
     const template = customer.emailTemplate;
     console.log(`   Template: ${template}`);
@@ -180,8 +153,18 @@ app.post("/api/preview", async (req, res) => {
       return res.status(404).json({ success: false, error: `Template '${template}' not found in templates folder` });
     }
 
-    const htmlContent = await templateEngine.render(template, customer);
+    let htmlContent = await templateEngine.generateEmail(customer);
     console.log(`   HTML rendered: ${htmlContent.length} characters`);
+
+    // Replace CID image references with base64 data URLs for browser preview
+    const paymentImagePath = path.join(__dirname, "../templates/payment-options.jpeg");
+    if (htmlContent.includes('src="cid:payment-options"') && fs.existsSync(paymentImagePath)) {
+      const imageData = fs.readFileSync(paymentImagePath).toString('base64');
+      htmlContent = htmlContent.replace(
+        'src="cid:payment-options"',
+        `src="data:image/jpeg;base64,${imageData}"`
+      );
+    }
 
     res.json({
       success: true,
@@ -190,6 +173,7 @@ app.post("/api/preview", async (req, res) => {
         email: customer.email,
         customerName: customer.customerName,
         etcNumber: customer.etcNumber,
+        vehicleCount: customer.vehicles.length,
       },
       template: template,
       recordIndex: recordIndex,
@@ -202,110 +186,114 @@ app.post("/api/preview", async (req, res) => {
 });
 
 /**
- * API: Send emails
+ * API: Send emails with real-time SSE progress stream
  */
-app.post("/api/send", async (req, res) => {
+app.get("/api/send-stream", async (req, res) => {
+  // SSE headers
+  res.setHeader("Content-Type", "text/event-stream");
+  res.setHeader("Cache-Control", "no-cache");
+  res.setHeader("Connection", "keep-alive");
+  res.flushHeaders();
+
+  const send = (obj) => res.write(`data: ${JSON.stringify(obj)}\n\n`);
+
   try {
-    const { dryRun = false, limit = null } = req.body;
+    const dryRun = req.query.dryRun === "true";
+    const limit = req.query.limit ? parseInt(req.query.limit) : null;
 
     if (!templateEngine) {
       await initializeEmailService();
     }
 
     if (!emailConfig) {
-      return res.status(400).json({ success: false, error: "Email not configured" });
+      send({ type: "error", error: "Email not configured. Check .env file." });
+      return res.end();
+    }
+
+    if (currentCustomers.length === 0) {
+      send({ type: "error", error: "No CSV data loaded." });
+      return res.end();
     }
 
     const emailSender = new EmailSender(emailConfig);
     await emailSender.initialize(dryRun);
 
-    let recipients = currentCustomers;
-    if (limit) {
-      recipients = recipients.slice(0, limit);
-    }
+    let recipients = limit ? currentCustomers.slice(0, limit) : currentCustomers;
+    const total = recipients.length;
 
-    const results = {
-      success: [],
-      failed: [],
-      total: recipients.length,
-    };
+    send({ type: "start", total });
+
+    let sentCount = 0;
+    let failedCount = 0;
 
     for (let i = 0; i < recipients.length; i++) {
+      const customer = recipients[i];
       try {
-        const rawCustomer = recipients[i];
-
-        // Preprocess raw CSV data to match template engine expectations
-        const customer = {
-          email: rawCustomer['Send-Email-To'] || rawCustomer.email || "N/A",
-          customerName: rawCustomer['Customer-Name'] || rawCustomer.customerName || "Customer",
-          etcNumber: rawCustomer['ETC-number'] || rawCustomer.etcNumber || "0000",
-          cnic: rawCustomer['CNIC'] || rawCustomer.cnic || "N/A",
-          contactNumber: rawCustomer['Customer-Contact'] || rawCustomer.contactNumber || "N/A",
-          totalAmount: rawCustomer['Payment-Amount'] || rawCustomer.totalAmount || "N/A",
-          expiryDate: rawCustomer['Tenure-Ending-Date'] || rawCustomer.expiryDate || "N/A",
-          installationDate: rawCustomer['installation-date'] || rawCustomer.installationDate || null,
-          credentials: rawCustomer['credentials'] || rawCustomer.credentials || null,
-          alertMobile: rawCustomer['mobile-for-alerts'] || rawCustomer.alertMobile || null,
-          residentCity: rawCustomer['geofence-city'] || rawCustomer.residentCity || null,
-          emailTemplate: rawCustomer["email-template"] || rawCustomer["emailTemplate"] || "renewal-pending",
-          notes: rawCustomer['notes'] || rawCustomer.notes || null,
-          ...rawCustomer // Include all original fields for template compatibility
-        };
-
         const template = customer.emailTemplate;
-
         const templatePath = path.join(__dirname, "../templates", `${template}.hbs`);
         if (!fs.existsSync(templatePath)) {
           throw new Error(`Template '${template}' not found`);
         }
 
-        const htmlContent = await templateEngine.render(template, customer);
-
-        // Use the proper emailSender.sendEmail method to match "npm start" behavior
+        const htmlContent = await templateEngine.generateEmail(customer);
         const result = await emailSender.sendEmail(customer, htmlContent, dryRun);
 
         if (result.success) {
-          results.success.push({
+          sentCount++;
+          send({
+            type: "progress",
+            index: i + 1,
+            total,
+            sentCount,
+            failedCount,
+            status: "success",
             email: customer.email,
-            template: template,
+            etcNumber: customer.etcNumber,
+            customerName: customer.customerName,
+            template,
             message: dryRun ? "Dry run - email prepared" : "Email sent successfully",
-            messageId: result.messageId,
           });
         } else {
-          results.failed.push({
+          failedCount++;
+          send({
+            type: "progress",
+            index: i + 1,
+            total,
+            sentCount,
+            failedCount,
+            status: "failed",
             email: customer.email,
-            template: template,
+            etcNumber: customer.etcNumber,
+            customerName: customer.customerName,
+            template,
             error: result.error,
           });
         }
 
-        // Add delay between emails
-        await new Promise((resolve) =>
-          setTimeout(resolve, emailConfig.EMAIL_DELAY || 1000)
-        );
+        await new Promise((resolve) => setTimeout(resolve, emailConfig.EMAIL_DELAY || 1000));
       } catch (error) {
-        const email = recipients[i]['Send-Email-To'] || recipients[i].email || 'unknown';
-        const template = recipients[i]["email-template"] || recipients[i]["emailTemplate"] || "unknown";
-        results.failed.push({
-          email: email,
-          template: template,
+        failedCount++;
+        send({
+          type: "progress",
+          index: i + 1,
+          total,
+          sentCount,
+          failedCount,
+          status: "failed",
+          email: customer.email || "unknown",
+          etcNumber: customer.etcNumber || "unknown",
+          customerName: customer.customerName || "unknown",
+          template: customer.emailTemplate || "unknown",
           error: error.message,
         });
       }
     }
 
-    res.json({
-      success: true,
-      mode: dryRun ? "DRY-RUN" : "PRODUCTION",
-      results: results,
-      summary: {
-        total: results.total,
-        sent: results.success.length,
-        failed: results.failed.length,
-      },
-    });
+    send({ type: "done", total, sentCount, failedCount });
+    res.end();
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    send({ type: "error", error: error.message });
+    res.end();
   }
 });
 
