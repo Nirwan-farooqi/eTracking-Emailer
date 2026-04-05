@@ -238,7 +238,7 @@
         <div class="step-card">
           <div class="step-num">1</div>
           <h4>Upload CSV</h4>
-          <p>Drag-and-drop or click the upload area. The system groups rows by ETC number and shows the customer count.</p>
+          <p>Drag-and-drop or click the upload area. Four stat cards appear: <strong>Total Customers</strong> (unique ETC numbers = emails to send), <strong>Total Units</strong> (total vehicle rows), <strong>Columns</strong> (should be 15), and <strong>Status ✅</strong>.</p>
         </div>
         <div class="step-card">
           <div class="step-num">2</div>
@@ -251,6 +251,15 @@
           <p>Click <strong>Send Emails</strong>. Watch the live progress bar and per-email results as they stream in.</p>
         </div>
       </div>
+
+      <h3>Stat cards after upload</h3>
+      <table>
+        <tr><th>Card</th><th>What it counts</th></tr>
+        <tr><td><strong>Total Customers</strong></td><td>Unique ETC numbers — this is how many emails will be sent (one per customer, regardless of how many vehicles they have)</td></tr>
+        <tr><td><strong>Total Units</strong></td><td>Total vehicle rows across all customers — useful to confirm how many vehicles are covered in this batch</td></tr>
+        <tr><td><strong>Columns</strong></td><td>Number of CSV columns detected — should be <strong>15</strong> for the standard records sheet; any other value may indicate a wrong file or missing columns</td></tr>
+        <tr><td><strong>Status</strong></td><td>✅ = file parsed successfully with no errors</td></tr>
+      </table>
 
       <div class="callout callout-info">
         <strong>ℹ Configuration check</strong>
@@ -347,9 +356,9 @@
         All rows with the same ETC number are automatically merged into <strong>one customer object</strong>. Only <strong>one email</strong> is sent listing every vehicle in a table. The total payable amount is the sum of all vehicle amounts. The expiry date shown is the earliest expiry across all vehicles.
       </div>
 
-      <p><strong>Example:</strong> ETC-0189 (Ifran Iqbal) has 5 rows in the CSV. The portal shows 1 customer record, sends 1 email, and that email contains a table of all 5 vehicles.</p>
+      <p><strong>Example:</strong> ETC-0313 (Super Asia Group) has 10 vehicle rows in the CSV. The portal shows 1 customer record, sends 1 email, and that email contains a table of all 10 vehicles.</p>
 
-      <p>You can verify this by uploading the CSV and checking the <strong>Records</strong> count — it shows unique customers, not raw rows.</p>
+      <p>After uploading, the <strong>Total Customers</strong> card shows unique ETC numbers (= emails that will be sent), while the <strong>Total Units</strong> card shows the total vehicle count across all customers. If a file has 37 unique customers across 67 vehicle rows, you will see: <strong>Total Customers: 37 &nbsp;|&nbsp; Total Units: 67</strong>.</p>
     </section>
 
     <!-- 7 -->
@@ -474,9 +483,9 @@ node src/index.js --delay 5000</code></pre>
           <td>Open the CSV, find blank cells in the <code>email-template</code> column, fill them with a valid value (e.g. <code>renewal-pending</code>)</td>
         </tr>
         <tr>
-          <td>Record count seems too high</td>
-          <td>Excel adds many empty rows</td>
-          <td>No action needed — empty rows are ignored automatically. Record count = unique customers.</td>
+          <td>Total Customers count seems wrong</td>
+          <td>Excel adds many empty rows, or rows share the same ETC number</td>
+          <td>Empty rows are ignored automatically. <strong>Total Customers</strong> = unique ETC numbers. <strong>Total Units</strong> = total vehicle rows. A customer with 10 vehicles counts as 1 customer but 10 units.</td>
         </tr>
         <tr>
           <td>FAILED — No email address</td>
