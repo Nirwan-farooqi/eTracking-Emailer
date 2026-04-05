@@ -231,7 +231,15 @@ npm run gui
 
 ### Workflow
 
-1. **Upload CSV** — drag-and-drop or click to select. The system groups rows by ETC number and shows unique customer count.
+1. **Upload CSV** — drag-and-drop or click to select. The system groups all rows by `ETC-number` and displays four stat cards:
+
+   | Card | What it counts |
+   |------|----------------|
+   | **Total Customers** | Unique ETC numbers → one email per customer |
+   | **Total Units** | Total vehicle rows across all customers |
+   | **Columns** | Number of CSV columns (sanity check — should be 15 for the standard sheet) |
+   | **Status** | ✅ if file parsed successfully |
+
 2. **Preview** — type a record number and click Preview to see the rendered email in a panel.
 3. **Send** — click Send Emails. A live progress bar shows `Sending... 12 / 56 ✅ 12 ❌ 0` and each result row appears in real-time as emails are sent.
 
@@ -240,7 +248,7 @@ npm run gui
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | `GET` | `/api/status` | Check email config |
-| `POST` | `/api/upload` | Upload + parse CSV (returns grouped customers) |
+| `POST` | `/api/upload` | Upload + parse CSV. Response: `{ recordCount, totalUnits, columns[], sampleRecord }` |
 | `POST` | `/api/preview` | Render email HTML for a given record index |
 | `GET` | `/api/send-stream` | SSE stream — sends all emails with real-time progress |
 | `GET` | `/api/data` | Get currently loaded customer data |

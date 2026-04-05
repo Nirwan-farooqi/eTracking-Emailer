@@ -85,11 +85,14 @@ Multer Processing
       ▼
 CSV Stored Locally
       ▼
-Parse CSV Rows
+CSVBatchProcessor.groupCustomersByETC()
       ▼
-Return Metadata (record count, columns)
+Return Metadata:
+  recordCount  → unique ETC numbers (Total Customers)
+  totalUnits   → sum of vehicles[] lengths (Total Units)
+  columns[]    → CSV column names (sanity check, expect 15)
       ▼
-Display to User
+Display 4 stat cards to User
 ```
 
 ### 2. Template Selection & Preview
