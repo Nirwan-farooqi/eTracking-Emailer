@@ -108,11 +108,14 @@ app.post("/api/upload", upload.single("file"), async (req, res) => {
     processor.finalizeCustomerTemplates();
     currentCustomers = processor.getCustomersData();
 
+    const totalUnits = currentCustomers.reduce((sum, c) => sum + (c.vehicles ? c.vehicles.length : 0), 0);
+
     res.json({
       success: true,
       filename: req.file.filename,
       originalName: req.file.originalname,
       recordCount: currentCustomers.length,
+      totalUnits,
       sampleRecord: currentCustomers[0] || null,
       columns: currentCustomers.length > 0 ? Object.keys(currentCustomers[0]) : [],
     });

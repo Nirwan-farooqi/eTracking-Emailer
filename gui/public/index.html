@@ -619,8 +619,12 @@
             <div id="uploadStatus"></div>
             <div class="stats" id="uploadStats" style="display: none;">
                 <div class="stat-box">
-                    <div class="stat-label">Records</div>
+                    <div class="stat-label">Total Customers</div>
                     <div class="stat-value" id="recordCount">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Total Units</div>
+                    <div class="stat-value" id="unitCount">0</div>
                 </div>
                 <div class="stat-box">
                     <div class="stat-label">Columns</div>
@@ -820,6 +824,7 @@
             const statsDiv = document.getElementById("uploadStats");
             statsDiv.style.display = "grid";
             document.getElementById("recordCount").textContent = uploadedData.recordCount;
+            document.getElementById("unitCount").textContent = uploadedData.totalUnits || 0;
             document.getElementById("columnCount").textContent = uploadedData.columns.length;
             document.getElementById("clearButton").style.display = "block";
             
